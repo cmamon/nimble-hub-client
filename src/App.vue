@@ -24,10 +24,10 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 30px;
 }
 
 img {
+    margin-top: 30px;
     padding-bottom: 30px;
 }
 </style>
