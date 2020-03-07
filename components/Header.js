@@ -1,9 +1,12 @@
 import Link from "next/link";
 
 export default function Header() {
-    return (
-    <Link href="/about" title="About Page">
-        <a>About Page</a>
-    </Link>
-    );
+  return (
+    <div>
+      <b>Socket IO Hub</b> |
+      <Link href="/about">
+        <a> About</a>
+      </Link>
+    </div>
+  );
 }
