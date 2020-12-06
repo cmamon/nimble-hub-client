@@ -1,20 +1,17 @@
+import Head from 'next/head'
 import React from 'react'
-import Home from './Home'
 
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-
-import '../css/app.sass';
-import '../css/styles.css';
+import Chat from './Chat'
 
 class Index extends React.Component {
   render() {
     return (
-      <div className="container">
-        <Header />
-        <Home />
-        <Footer />
-      </div>
+      <>
+        <Head>
+          <title>Nimble socket Hub</title>
+        </Head>
+        <Chat />
+      </>
     )
   }
 }
