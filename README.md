@@ -1,0 +1,1 @@
+Nimble Hub Client is a web interface for the Nimble Hub Chat app. Technology used is the React Framework Next.js.
