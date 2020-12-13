@@ -6,24 +6,46 @@ class Message extends React.Component {
   }
 
   render() {
+    const messageRowClasses = `message-row ${this.props.origin}`
+    const messageClasses = `message message-${this.props.origin}`;
+
     return (
       <>
-        <div className="message">
-          <p className="content-p">{this.props.content}</p>
-          <p className="sending-time-p">{this.props.sendingTime}</p>
+        <div className={messageRowClasses}>
+          <div className={messageClasses}>
+            <p className="content-p">{this.props.content}</p>
+            <p className="sending-time-p">{this.props.sendingTime}</p>
+          </div>
         </div>
         <style jsx>
           {`
+            .message-row {
+              display: flex;
+            }
+
+            .self {
+              justify-content: flex-end;
+            }
+
+            .foreign {
+              justify-content: flex-start;
+            }
+
             .message {
               padding: 0 12px 0 12px;
-              margin: 5px 0 5px 0;
-              min-width: fit-content;
-              // max-width: 60%;
+              margin: 6px 0 6px 0;
+              max-width: 60%;
               border-radius: 10px;
-              box-shadow: 1px 0 6px 1px rgba(0, 0, 0, 0.6);
               background: lightsalmon;
             }
 
+            .message-self {
+              box-shadow: -1px 0 4px 0 rgba(0, 0, 0, 0.6);
+            }
+
+            .message-foreign {
+              box-shadow: 1px 0 4px 0 rgba(0, 0, 0, 0.6);
+            }
             .content-p {
               overflow-wrap: break-word;
               margin-top: 8px;

@@ -1,8 +1,12 @@
-import io from 'socket.io-client'
-import React from 'react'
+import ContentEditable from 'react-contenteditable';
+import io from 'socket.io-client';
+import React from 'react';
+import sanitizeHtml from 'sanitize-html';
 
-import ChatHeader from '../components/ChatHeader'
-import Message from '../components/Message'
+import styles from '../styles/Chat.module.css';
+
+import ChatHeader from '../components/ChatHeader';
+import Message from '../components/Message';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -49,6 +53,7 @@ class Chat extends React.Component {
 
   updateMessageList = () => {
     this.state.socket.on('message', (message) => {
+      message.origin = 'foreign';
       this.setState({ messageList: [...this.state.messageList, message] });
     });
   }
@@ -56,6 +61,14 @@ class Chat extends React.Component {
   updateMessage = (event) => {
     this.setState({ message: event.target.value });
   }
+
+  sanitizeConfig = {
+    allowedAttributes: { a: ["href"] }
+  };
+
+  sanitize = () => {
+    this.setState({ message: sanitizeHtml(this.state.message, this.sanitizeConf) });
+  };
 
   render() {
     const messageList = this.state.messageList.map((message, id) =>
@@ -70,71 +83,18 @@ class Chat extends React.Component {
             <div id="message-list">
               {messageList}
             </div>
-            <div id="message-input">
-              <form onSubmit={this.sendMessage}>
-                <input className="text-input" type="text" placeholder="Your message" value={this.state.message} onChange={this.updateMessage}></input>
-                <button className="button" type="submit">
+            <div id="chat-footer">
+              <div id="message-input-row">
+                {/* <div id="message-input" contentEditable onInput={this.updateMessage}></div> */}
+                <ContentEditable className="editable" html={this.state.message} onBlur={this.sanitize} onChange={this.updateMessage} />
+                {/* <textarea id="message-input" rows="1" placeholder="Your message" value={this.state.message} onChange={this.updateMessage}></textarea> */}
+                <button className="button" onClick={this.sendMessage}>
                   Send
                 </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-        <style jsx>
-          {`
-            #main {
-              display: flex;
-              flex-flow: column;
-              height: 100%;
-              margin: auto;
-              width: 50%;
-              box-shadow: 2px 0 10px 1px rgba(0, 0, 0, 0.2), -2px 0 10px 1px rgba(0, 0, 0, 0.2);
-              background-color: #dee4ea;
-              background-image: linear-gradient(147deg, #dee4ea 0%, #f9fcff 74%);
-              flex-grow : 1;
-            }
-
-            #message-list {
-              display: flex;
-              flex-flow: column;
-              flex: 1 1 auto;
-              margin: 10px;
-              padding: 10px;
-              overflow-y: auto;
-            }
-
-            #message-input {
-              flex: 0 1;
-              text-align: center;
-              -webkit-box-shadow: 0 -8px 6px -6px rgba(0, 0, 0, 0.3);
-              -moz-box-shadow: 0 -8px 6px -6px rgba(0, 0, 0, 0.3);
-              box-shadow: 0 -8px 6px -6px rgba(0, 0, 0, 0.3);
-            }
-
-            form {
-              padding 15px;
-              bottom: 0;
-              width: 100%;
-            }
-
-            form input {          
-              border-radius: 5px;
-              border: none; 
-              padding: 15px;
-              margin-right: 2%;
-              width: 70%;
-              box-shadow: 1px 0 3px 1px rgba(0, 0, 0, 0.2), -1px 0 3px 1px rgba(0, 0, 0, 0.2);
-            }
-
-            form button {
-              border: none;
-              padding: 15px;
-              border-radius: 5px; 
-              width: 20%;
-              box-shadow: 1px 0 3px 1px rgba(0, 0, 0, 0.2), -1px 0 3px 1px rgba(0, 0, 0, 0.2);
-            }
-          `}
-        </style>
       </>
     );
   }
